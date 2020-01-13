@@ -24,6 +24,14 @@ func (manager *MessageManager) NewMessage(message string, owner int, length int)
 
 }
 
+func (manager *MessageManager) AddMessage(message Message) {
+	message.uid = manager.currentid
+	message.visible = true
+	message.length = len(message.message)
+	manager.messages = append(manager.messages, message)
+	manager.currentid++
+}
+
 func (manager *MessageManager) DeleteMessage(messageid int) error {
 	for i, message := range manager.messages {
 		if message.uid == messageid {

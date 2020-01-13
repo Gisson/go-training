@@ -2,10 +2,10 @@ package message
 
 type Message struct {
 	uid     int
-	message string
+	message string `json:"message"`
 	visible bool
 	length  int
-	owner   int
+	owner   int `json:"owner"`
 }
 
 func (m *Message) Owner() int {
