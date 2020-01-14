@@ -1,11 +1,14 @@
 package main
 
 import (
-	"bufio"
+	_ "bufio"
 	"errors"
-	"fmt"
+	_ "fmt"
+	"github.com/Gisson/simple-messenger/api"
 	msgpkg "github.com/Gisson/simple-messenger/message"
-	"os"
+	"github.com/Gisson/simple-messenger/server"
+	"github.com/julienschmidt/httprouter"
+	_ "os"
 )
 
 type User struct {
@@ -30,47 +33,9 @@ type MessengerError struct {
 }
 
 func main() {
-	manager := msgpkg.New()
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Print("Enter command: ")
-		text, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Print(err)
-			os.Exit(-1)
-		}
-		if text == "A\n" {
-			var uid int
-			var messageText string
-
-			_, err := fmt.Scanf("%d %s", &uid, &messageText)
-			if err != nil {
-				fmt.Print(err)
-				os.Exit(-1)
-			}
-			manager.NewMessage(messageText, uid, len(messageText))
-
-			//			message := Message{owner: user, message: messageText, visible: true, length: len(messageText)}
-		} else if text == "L\n" {
-			fmt.Printf("Total messages: %d\n", manager.GetNumberOfMessages())
-			for _, message := range manager.ListMessages() {
-				fmt.Printf("%d:%s\n", message.Owner(), message.Message())
-			}
-		} else if text == "U\n" {
-			var uid int
-			fmt.Scanf("%d", &uid)
-			fmt.Printf("Messages from user %d\n", uid)
-			for _, message := range manager.ListUserMessages(uid) {
-				fmt.Println(message.Message())
-			}
-		} else if text == "O\n" {
-			for _, message := range manager.GetLongestSentence() {
-				fmt.Printf("Longest sentence:%s:%s\n", message.Owner(), message.Message())
-			}
-		} else if text == "X\n" {
-			break
-		}
-	}
+	server, _ := server.New(&msgpkg.MessageManager{}, httprouter.New())
+	api.AddAllRoutes(server)
+	server.Start()
 }
 
 func createRootUser() User {

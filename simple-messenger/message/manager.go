@@ -18,7 +18,7 @@ func New() *MessageManager {
 }
 
 func (manager *MessageManager) NewMessage(message string, owner int, length int) {
-	newmessage := Message{uid: manager.currentid, message: message, visible: true, owner: owner, length: len(message)}
+	newmessage := Message{uid: manager.currentid, Message: message, visible: true, Owner: owner, length: len(message)}
 	manager.messages = append(manager.messages, newmessage)
 	manager.currentid++
 
@@ -27,7 +27,7 @@ func (manager *MessageManager) NewMessage(message string, owner int, length int)
 func (manager *MessageManager) AddMessage(message Message) {
 	message.uid = manager.currentid
 	message.visible = true
-	message.length = len(message.message)
+	message.length = len(message.Message)
 	manager.messages = append(manager.messages, message)
 	manager.currentid++
 }
@@ -50,7 +50,7 @@ func (manager *MessageManager) ListMessages() []Message {
 func (manager *MessageManager) ListUserMessages(uid int) []Message {
 	userMessages := make([]Message, 0)
 	for _, message := range manager.messages {
-		if message.owner == uid {
+		if message.Owner == uid {
 			userMessages = append(userMessages, message)
 		}
 	}
