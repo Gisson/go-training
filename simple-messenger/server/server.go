@@ -14,11 +14,12 @@ type Server struct {
 
 type ServerHandler func(*Server) httprouter.Handle
 
-func New(manager *message.MessageManager, router *httprouter.Router) (*Server, error) {
+func New(m *message.MessageManager, router *httprouter.Router) (*Server, error) {
 	server := &Server{}
 	server.router = router
 	server.http = &http.Server{}
 	server.http.Addr = "0.0.0.0:8080" // FIXME
+	server.manager = m
 
 	server.http.Handler = router
 	return server, nil

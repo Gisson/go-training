@@ -33,7 +33,7 @@ type MessengerError struct {
 }
 
 func main() {
-	server, _ := server.New(&msgpkg.MessageManager{}, httprouter.New())
+	server, _ := server.New(msgpkg.New(), httprouter.New())
 	api.AddAllRoutes(server)
 	server.Start()
 }

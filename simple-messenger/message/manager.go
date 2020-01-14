@@ -2,6 +2,7 @@ package message
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 )
 
@@ -11,10 +12,9 @@ type MessageManager struct {
 }
 
 func New() *MessageManager {
-	manager := MessageManager{}
+	manager := &MessageManager{currentid: 0}
 	manager.messages = make([]Message, 0)
-	manager.currentid = 0
-	return &manager
+	return manager
 }
 
 func (manager *MessageManager) NewMessage(message string, owner int, length int) {
@@ -25,6 +25,8 @@ func (manager *MessageManager) NewMessage(message string, owner int, length int)
 }
 
 func (manager *MessageManager) AddMessage(message Message) {
+	fmt.Printf("Message uid: %d\n", message.uid)
+	fmt.Printf("Currentuid: %d\n", manager.currentid)
 	message.uid = manager.currentid
 	message.visible = true
 	message.length = len(message.Message)

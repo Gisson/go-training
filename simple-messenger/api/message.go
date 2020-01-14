@@ -24,13 +24,16 @@ func AddMessageHandler(srv *server.Server) (handle httprouter.Handle) {
 			fmt.Println(err)
 			return
 		}
+		fmt.Printf("%s\n", buf)
 		msg := message.Message{}
 		err = json.Unmarshal(buf, &msg)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
+		fmt.Printf("Struct %v\n", msg)
 		srv.Manager().AddMessage(msg)
+		//		srv.Manager().NewMessage(msg.Message, msg.Owner, len(msg.Message))
 		result.Data = "OK"
 		buf, _ = json.Marshal(&result)
 		/*if err != nil {
